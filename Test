@@ -1,0 +1,9 @@
+# search for Christopher and Mark
+
+name= 'Christopher'
+lst= list_dics
+my_search(name, lst)
+
+name= 'Mark'
+lst= list_dics
+my_search(name, lst)
