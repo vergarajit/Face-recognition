@@ -1,0 +1,30 @@
+# import required libraries 
+import zipfile
+from PIL import Image
+import pytesseract
+import cv2 as cv
+import numpy as np
+
+# loading the face detection classifier
+face_cascade = cv.CascadeClassifier('readonly/haarcascade_frontalface_default.xml')
+
+#Rutine to unzip the images
+archive = zipfile.ZipFile('small_img.zip')
+info_list= archive.infolist()
+
+#Create a list with name, image and text
+list_dics= []
+
+for item in info_list:
+    
+    name_img= item.filename
+    file_img= Image.open(archive.open(name_img))
+    text= pytesseract.image_to_string(file_img.convert('L'))
+
+#Checking for Christopher
+    if ('Christopher' in text) or ('Mark' in text): 
+        
+        dic= {'name': name_img, 'image': file_img, 'text': text}
+        list_dics.append(dic)   
+ 
+
