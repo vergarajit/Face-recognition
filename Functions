@@ -1,0 +1,51 @@
+#extract faces function 
+def extract_faces(image):
+    #Returned object as a list of rectangles
+    conv= np.array(image.convert('L'))
+    faces= face_cascade.detectMultiScale(conv)
+
+    if len(faces) == 0:
+        return None 
+
+    #cut the faces
+    list_faces= []
+    
+    for x,y,w,h in faces:
+        list_faces.append(image.crop((x,y,x+w,y+h)))
+
+    #contact sheet
+    contact_sheet= Image.new(image.mode, (640, 128))
+    x= 0
+    y= 0
+
+    for face in list_faces:
+        # Resize and paste the current image into the contact sheet
+        face.thumbnail((128, 128))
+        contact_sheet.paste(face, (x,y) )
+        # Now we update our X position. If it is going to be the width of the image, then we set it to 0
+        # and update Y as well to point to the next "line" of the contact sheet.
+        if x+128 == contact_sheet.width:
+            x= 0
+            y= y+128
+        else:
+            x= x+128
+    
+    return contact_sheet
+    
+    
+#search function
+def my_search(name, lst):
+       
+    for item in list_dics:
+        # test if value is in the text
+        if name in item['text']:
+            
+            print("Results found in the file {}".format(item['name']))
+        # extract the faces in image
+            image= item['image']
+            contact_sheet= extract_faces(image)
+            if contact_sheet is not None:
+                
+                display(contact_sheet)
+            else:
+                print('But there were no faces that file!')
